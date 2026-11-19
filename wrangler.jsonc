@@ -1,0 +1,6 @@
+{
+  // Static site for Spencer's family calendar. Cloudflare redeploys on every push to main.
+  "name": "spencer-calendar-dev",
+  "compatibility_date": "2026-11-01",
+  "assets": { "directory": "./public" }
+}

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Spencer">
+<meta name="theme-color" content="#f6f3ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111315" media="(prefers-color-scheme: dark)">
+<title>Spencer — Summer 2026–27</title>
+<style>
+  :root {
+    --paper: #f6f3ee; --card: #ffffff; --ink: #191c20; --soft: #5d646e; --faint: #8d939c; --line: #e3ded5;
+    --kate: #0e6a62;    --kate-t: #e3f0ee;
+    --steve: #2a3f8f;   --steve-t: #e6e9f6;
+    --grandma: #b0502a; --grandma-t: #f7e8e0;
+    --open: #7c828b;    --open-t: #eeece8;
+    --serif: ui-serif, "New York", "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #111315; --card: #1a1d21; --ink: #eef0f2; --soft: #a4abb5; --faint: #7b828c; --line: #2a2e34;
+      --kate: #5fc9bd;    --kate-t: #12302d;
+      --steve: #94a8f5;   --steve-t: #1b2445;
+      --grandma: #eb9a78; --grandma-t: #3a2219;
+      --open: #9aa0a9;    --open-t: #24272c;
+    }
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.4 var(--sans);
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) calc(env(safe-area-inset-bottom) + 96px) env(safe-area-inset-left);
+  }
+  main { max-width: 580px; margin: 0 auto; padding: 0 16px; }
+  .cap { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+
+  /* Masthead */
+  header { padding: 30px 0 18px; border-bottom: 1px solid var(--ink); }
+  h1 { margin: 6px 0 0; font: 400 46px/1 var(--serif); letter-spacing: -0.02em; }
+  .dek { margin-top: 8px; color: var(--soft); font-size: 16px; }
+
+  /* School dates */
+  .school { padding: 16px 0 4px; border-bottom: 1px solid var(--line); }
+  .school dl { margin: 8px 0 12px; display: grid; grid-template-columns: 1fr auto; gap: 7px 14px; font-size: 16px; }
+  .school dt { color: var(--soft); }
+  .school dd { margin: 0; font-weight: 600; text-align: right; white-space: nowrap; }
+
+  /* People filter */
+  .people { display: flex; gap: 8px; padding: 14px 0 6px; overflow-x: auto; scrollbar-width: none; }
+  .people::-webkit-scrollbar { display: none; }
+  .people button {
+    font: 600 15px/1 var(--sans); color: var(--ink); background: transparent; white-space: nowrap;
+    border: 1px solid var(--line); border-radius: 999px; padding: 0 15px; min-height: 44px;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .people button i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+  .people button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* Month + period headings */
+  h2 {
+    position: sticky; top: 0; z-index: 5; margin: 22px -16px 10px; padding: 10px 16px 9px;
+    padding-top: calc(10px + env(safe-area-inset-top));
+    font: 400 24px/1.1 var(--serif); background: var(--paper); border-bottom: 1px solid var(--line);
+  }
+  h2 span { color: var(--faint); }
+  .period { display: flex; align-items: center; gap: 12px; margin: 18px 0 10px; }
+  .period::before, .period::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  /* Day */
+  .day {
+    display: grid; grid-template-columns: 54px 1fr; gap: 12px;
+    padding: 14px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 64px;
+  }
+  .date { text-align: left; padding-top: 2px; }
+  .dow { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+  .num { font: 400 34px/1 var(--serif); margin-top: 3px; font-variant-numeric: lining-nums tabular-nums; }
+  .weekend .dow { color: var(--ink); }
+  .flag { margin-top: 6px; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+          background: var(--ink); color: var(--paper); border-radius: 4px; padding: 3px 5px; display: inline-block; }
+
+  /* Tonight band — the anchor of every row */
+  .night {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    background: var(--t); border-radius: 12px; padding: 10px 12px 10px 14px; border-left: 4px solid var(--c);
+  }
+  .night .cap { color: var(--c); font-size: 11px; }
+  .night .where { font: 600 19px/1.2 var(--serif); }
+  .night .sub { font-size: 14px; color: var(--soft); margin-top: 1px; }
+  .badge {
+    flex: none; font-size: 13px; font-weight: 700; letter-spacing: .04em; color: #fff; background: var(--c);
+    border-radius: 999px; padding: 6px 11px; white-space: nowrap;
+  }
+  @media (prefers-color-scheme: dark) { .badge { color: #111315; } }
+  .open .night { border-left-style: dashed; }
+  .open .badge { background: transparent; color: var(--c); border: 1px dashed var(--c); }
+
+  /* What's on */
+  .items { list-style: none; margin: 10px 0 0; padding: 0; }
+  .items li { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: baseline; padding: 5px 0 5px 2px; }
+  .items .t { font-size: 17px; font-weight: 600; }
+  .items .n { grid-column: 1 / -1; font-size: 15px; color: var(--soft); }
+  .who { font-size: 13px; font-weight: 700; color: var(--c); white-space: nowrap; }
+  .who::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); margin-right: 6px; }
+  .tbc { font-size: 11px; font-weight: 700; letter-spacing: .1em; color: var(--faint); border: 1px dashed var(--faint);
+         border-radius: 4px; padding: 1px 5px; margin-left: 6px; vertical-align: 2px; font-style: normal; }
+
+  .kate { --c: var(--kate); --t: var(--kate-t); }
+  .steve { --c: var(--steve); --t: var(--steve-t); }
+  .grandma { --c: var(--grandma); --t: var(--grandma-t); }
+  .open { --c: var(--open); --t: var(--open-t); }
+
+  .past { opacity: .42; }
+  body[data-filter="kate"] .day:not([data-who~="kate"]),
+  body[data-filter="steve"] .day:not([data-who~="steve"]),
+  body[data-filter="grandma"] .day:not([data-who~="grandma"]) { display: none; }
+
+  #jump {
+    position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom) + 18px); z-index: 10;
+    font: 600 16px/1 var(--sans); letter-spacing: .02em; padding: 0 24px; min-height: 48px;
+    border: 0; border-radius: 999px; background: var(--ink); color: var(--paper); box-shadow: 0 8px 24px rgba(0,0,0,.22);
+  }
+  footer { color: var(--faint); font-size: 13px; padding: 20px 0 0; line-height: 1.5; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="cap">Family calendar</div>
+    <h1>Spencer</h1>
+    <div class="dek" id="updated"></div>
+  </header>
+
+  <section class="school">
+    <div class="cap">School · Marist College Canberra</div>
+    <dl id="school"></dl>
+  </section>
+
+  <nav class="people" id="people" aria-label="Show days for"></nav>
+  <div id="days"></div>
+  <footer id="foot"></footer>
+</main>
+<button id="jump" type="button">Today</button>
+
+<script>
+/* =====================================================================
+   EDIT HERE. Dates are YYYY-MM-DD. People keys: kate | steve | grandma.
+   ===================================================================== */
+
+var START = '2026-11-19';
+var END   = '2027-02-05';
+var UPDATED = '19 November 2026, 6:00pm';   // shown under the title and in the footer
+
+var PEOPLE = { kate: 'Kate', steve: 'Steve', grandma: 'Grandma' };
+
+// School dates shown at the top (source: Marist term dates page)
+var SCHOOL = [
+  ['Term 4 ends (Year 4)',         'Fri 4 Dec 2026'],
+  ['Year 5 starts (returning students)', 'Tue 2 Feb 2027'],
+  ['Term 1 ends',                  'Fri 9 Apr 2027']
+];
+var TERMS = [                                   // days inside these are school days (Mon–Fri)
+  { from: '2026-10-13', to: '2026-12-04', name: 'Term 4 · Year 4' },
+  { from: '2027-02-02', to: '2027-04-09', name: 'Term 1 · Year 5' }
+];
+
+// Regular jobs on school days. Key is the weekday: 1 = Mon ... 5 = Fri
+var SCHOOL_ROUTINE = {
+  2: [ { t: 'Basketball training', note: 'Pickup 4:15pm' } ],
+  4: [ { t: 'School pickup', who: 'grandma' } ]
+};
+
+// Section dividers, shown above the given date
+var PERIODS = {
+  '2026-11-19': 'Term 4 · Year 4',
+  '2026-12-05': 'Summer holidays',
+  '2027-02-02': 'Term 1 · Year 5'
+};
+
+// WHERE HE SLEEPS. Later entries override earlier ones.
+// who: person responsible that night (null = not arranged yet). tbc: true = pencilled in.
+var NIGHTS = [
+  { from: '2026-11-19', to: '2026-12-04', who: 'kate',  where: "Kate's",          sub: 'Canberra' },
+  { from: '2026-12-05', to: '2026-12-21', who: null,    where: 'To be arranged',  sub: 'Canberra' },
+  { from: '2026-12-22', to: '2026-12-28', who: 'kate',  where: 'Wynyard, Tasmania', sub: 'With Wally, Ernie and Clem' },
+  { from: '2026-12-29', to: '2027-01-01', who: 'kate',  where: 'Gold Coast',      sub: "At Frances's, with Tilley and Max" },
+  { from: '2027-01-02', to: '2027-01-03', who: 'kate',  where: 'Sunshine Coast',  sub: "With Kate's parents" },
+  { from: '2027-01-04', to: '2027-01-10', who: 'kate',  where: "Kate's",          sub: 'Canberra' },
+  { from: '2027-01-11', to: '2027-02-01', who: null,    where: 'To be arranged',  sub: 'Canberra' },
+  { from: '2027-02-02', to: '2027-02-05', who: 'kate',  where: "Kate's",          sub: 'Canberra' },
+  // Steve's regular nights (Wed and Thu) until Term 4 ends
+  { from: '2026-11-19', to: '2026-11-19', who: 'steve', where: "Steve's", sub: 'Canberra' },
+  { from: '2026-11-25', to: '2026-11-26', who: 'steve', where: "Steve's", sub: 'Canberra' },
+  { from: '2026-12-02', to: '2026-12-03', who: 'steve', where: "Steve's", sub: 'Canberra' }
+];
+
+// WHAT'S ON. who = person doing it (optional). note and tbc optional.
+var EVENTS = {
+  '2026-12-04': [
+    { t: 'Last day of Year 4' },
+    { t: 'Final futsal match' },
+    { t: 'Swim and movie night', who: 'kate', note: "At Kate's with Louis, Riley and Max" }
+  ],
+  '2026-12-14': [ { t: 'K4 Holiday Program', note: 'Canberra Yacht Club, 9am to 4pm · day 1 of 5' } ],
+  '2026-12-15': [ { t: 'K4 Holiday Program', note: 'Canberra Yacht Club, 9am to 4pm' } ],
+  '2026-12-16': [ { t: 'K4 Holiday Program', note: 'Canberra Yacht Club, 9am to 4pm' } ],
+  '2026-12-17': [ { t: 'K4 Holiday Program', note: 'Canberra Yacht Club, 9am to 4pm' } ],
+  '2026-12-18': [ { t: 'K4 Holiday Program', note: 'Canberra Yacht Club, 9am to 4pm · last day' } ],
+  '2026-12-20': [ { t: 'Christmas catch-up', who: 'kate', note: "Afternoon at Kate's with Kylie, Alice, Bec and their kids" } ],
+  '2026-12-22': [ { t: 'Fly to Tasmania', who: 'kate', note: 'Canberra to Burnie (Wynyard) via Melbourne' } ],
+  '2026-12-25': [ { t: 'Christmas Day', note: 'With Wally, Ernie and Clem' } ],
+  '2026-12-29': [ { t: 'Fly to the Gold Coast', who: 'kate', note: 'Staying with Frances until 2 January' } ],
+  '2026-12-31': [ { t: "New Year's Eve", note: 'With Tilley and Max' } ],
+  '2027-01-01': [ { t: "New Year's Day" } ],
+  '2027-01-02': [ { t: 'Travel to the Sunshine Coast', who: 'kate', note: "A couple of days with Kate's parents" } ],
+  '2027-01-03': [ { t: "Pop's 95th birthday visit", who: 'kate', note: 'Caloundra; day not confirmed', tbc: true } ],
+  '2027-01-04': [ { t: 'Fly home to Canberra', who: 'kate', note: 'Date not confirmed', tbc: true } ],
+  '2027-01-11': [ { t: 'Kate back at work' } ],
+  '2027-01-26': [ { t: 'Australia Day', note: 'Public holiday' } ],
+  '2027-02-01': [ { t: 'Marist opens for new students', note: 'Spencer returns tomorrow' } ],
+  '2027-02-02': [ { t: 'First day of Year 5' } ]
+};
+
+/* ======================= no need to edit below ======================= */
+
+var DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+var MON = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+function parse(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+function key(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function inList(list, k) { var hit = null; for (var i = 0; i < list.length; i++) if (k >= list[i].from && k <= list[i].to) hit = list[i]; return hit; }
+var TBC = ' <em class="tbc">TBC</em>';
+
+var n0 = new Date(), today = new Date(n0.getFullYear(), n0.getMonth(), n0.getDate()), todayKey = key(today);
+
+document.getElementById('updated').textContent = 'Last updated ' + UPDATED;
+
+// School dates
+document.getElementById('school').innerHTML = SCHOOL.map(function (r) {
+  return '<dt>' + esc(r[0]) + '</dt><dd>' + esc(r[1]) + '</dd>';
+}).join('');
+
+// People filter
+(function () {
+  var el = document.getElementById('people');
+  var html = '<button type="button" data-f="" aria-pressed="true">Everyone</button>';
+  for (var p in PEOPLE) html += '<button type="button" class="' + p + '" data-f="' + p + '" aria-pressed="false"><i></i>' + esc(PEOPLE[p]) + '</button>';
+  el.innerHTML = html;
+  el.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('button') : null; if (!b) return;
+    document.body.setAttribute('data-filter', b.getAttribute('data-f'));
+    var all = el.querySelectorAll('button');
+    for (var i = 0; i < all.length; i++) all[i].setAttribute('aria-pressed', all[i] === b ? 'true' : 'false');
+  });
+})();
+
+// Days
+var html = '', lastMonth = -1;
+for (var d = parse(START), end = parse(END); d <= end; d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)) {
+  var k = key(d), wd = d.getDay(), night = inList(NIGHTS, k), term = inList(TERMS, k);
+  if (d.getMonth() !== lastMonth) { html += '<h2>' + MON[d.getMonth()] + ' <span>' + d.getFullYear() + '</span></h2>'; lastMonth = d.getMonth(); }
+  if (PERIODS[k]) html += '<div class="period cap">' + esc(PERIODS[k]) + '</div>';
+
+  var items = (EVENTS[k] || []).slice();
+  if (term && wd >= 1 && wd <= 5) {
+    items = [{ t: 'School', note: term.name }].concat(SCHOOL_ROUTINE[wd] || [], items);
+  }
+
+  var whoSet = {};
+  if (night && night.who) whoSet[night.who] = 1;
+  items.forEach(function (it) { if (it.who) whoSet[it.who] = 1; });
+
+  var nclass = night && night.who ? night.who : 'open';
+  var nightHtml = night ?
+    '<div class="night"><div><div class="where">' + esc(night.where) + (night.tbc ? TBC : '') + '</div>' +
+    (night.sub ? '<div class="sub">' + esc(night.sub) + '</div>' : '') + '</div>' +
+    '<span class="badge">' + (night.who ? esc(PEOPLE[night.who]) : 'Open') + '</span></div>' : '';
+
+  var itemsHtml = items.map(function (it) {
+    return '<li><span class="t">' + esc(it.t) + (it.tbc ? TBC : '') + '</span>' +
+      (it.who ? '<span class="who ' + it.who + '">' + esc(PEOPLE[it.who]) + '</span>' : '<span></span>') +
+      (it.note ? '<span class="n">' + esc(it.note) + '</span>' : '') + '</li>';
+  }).join('');
+
+  html += '<article class="day ' + nclass + (wd === 0 || wd === 6 ? ' weekend' : '') + (k < todayKey ? ' past' : '') +
+    '" id="d' + k + '" data-who="' + Object.keys(whoSet).join(' ') + '">' +
+    '<div class="date"><div class="dow">' + DOW[wd] + '</div><div class="num">' + d.getDate() + '</div>' +
+    (k === todayKey ? '<span class="flag">Today</span>' : '') + '</div>' +
+    '<div>' + nightHtml + (itemsHtml ? '<ul class="items">' + itemsHtml + '</ul>' : '') + '</div></article>';
+}
+document.getElementById('days').innerHTML = html;
+document.getElementById('foot').innerHTML = 'TBC marks anything pencilled in. Open means that night has not been arranged yet.<br>Updated ' + esc(UPDATED) + '.';
+
+// Today button
+(function () {
+  var btn = document.getElementById('jump'), t = document.getElementById('d' + todayKey);
+  if (!t) { btn.style.display = 'none'; return; }
+  btn.addEventListener('click', function () {
+    document.body.setAttribute('data-filter', '');
+    var all = document.querySelectorAll('#people button');
+    for (var i = 0; i < all.length; i++) all[i].setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+    t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+})();
+</script>
+</body>
+</html>
