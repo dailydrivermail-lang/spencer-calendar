@@ -9,6 +9,6 @@ Static page served by the Cloudflare Worker `spencer-calendar-dev`.
 
 ## Nightly Slack updates
 
-A scheduled Claude task runs at midnight (Sydney). It reads new messages in Slack #general
+A scheduled Claude task runs at midnight (Sydney). It reads new messages in Slack #spencer
 (channel C0CJXJW47QD), applies calendar changes to `public/index.html`, and pushes.
 `state/last-slack-ts.txt` holds the timestamp of the last Slack message already applied.
